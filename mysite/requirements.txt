@@ -1,5 +1,3 @@
-Django
-opencv-python
-django-cors-headers
-channels
-asgi_redis
+django
+daphne
+channels_redis
