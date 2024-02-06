@@ -14,7 +14,7 @@
     <script>
         const canvas = document.getElementById('webcamCanvas');
         const context = canvas.getContext('2d');
-        const socket = new WebSocket('ws://' + window.location.host + '/ws/webcam/');
+        const socket = new WebSocket('wss://' + window.location.host + '/ws/webcam/');
 
         socket.onopen = (event) => {
             console.log('WebSocket connection opened:', event);
