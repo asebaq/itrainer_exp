@@ -1,3 +1,5 @@
 Django
 opencv-python
 django-cors-headers
+channels
+asgi_redis

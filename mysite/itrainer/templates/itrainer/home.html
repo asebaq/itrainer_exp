@@ -1,29 +1,49 @@
-<html>
-  <head>
-    <title>ITrainer</title>
-  </head>
-  <body>
-    <div style="margin: auto;">
-      <h1 style="text-align: center;">ITrainer</h1>
-      <img style="display: block; margin-left: auto; margin-right: auto;" src="{% url 'video_feed' %}">
-    </div>
+<!-- your_app/templates/your_app/your_template.html -->
 
-    <h1>Camera Permission Request</h1>
-
-    <button id="requestCameraPermission">Request Camera Permission</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Stream</title>
+</head>
+<body>
+    <canvas id="webcamCanvas" width="640" height="480"></canvas>
 
     <script>
-    document.getElementById('requestCameraPermission').addEventListener('click', function() {
-        // Request camera access
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                console.log('Camera access granted:', stream);
-                // You can handle the camera stream here, e.g., display it in a video element
-            })
-            .catch(function(error) {
-                console.error('Error accessing camera:', error);
-            });
-    });
+        const canvas = document.getElementById('webcamCanvas');
+        const context = canvas.getContext('2d');
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/webcam/');
+
+        socket.onopen = (event) => {
+            console.log('WebSocket connection opened:', event);
+        };
+
+        socket.onmessage = (event) => {
+            if (event.data !== 'ping') {
+                const imageBytes = new Uint8Array(event.data);
+                const blob = new Blob([imageBytes], { type: 'image/jpeg' });
+
+                const img = new Image();
+                const imageUrl = URL.createObjectURL(blob);
+
+                img.onload = () => {
+                    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(imageUrl);
+                };
+
+                img.src = imageUrl;
+            }
+        };
+
+        socket.onclose = (event) => {
+            console.log('WebSocket connection closed:', event);
+        };
+
+        socket.onerror = (event) => {
+            console.error('WebSocket error:', event);
+        };
     </script>
-  </body>
+</body>
 </html>

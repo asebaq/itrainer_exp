@@ -1,7 +1,8 @@
+# your_app_name/urls.py
+
 from django.urls import path
-from . import views
+from .views import home
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("video_feed", views.video_feed, name="video_feed"),
+    path('', home, name='home'),
 ]
