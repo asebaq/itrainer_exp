@@ -1,4 +1,6 @@
-Django
+django
+daphne
+channels_redis
 opencv-python
 django-cors-headers
 channels
