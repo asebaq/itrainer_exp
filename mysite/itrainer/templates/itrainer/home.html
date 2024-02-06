@@ -22,17 +22,24 @@
 
         socket.onmessage = (event) => {
             if (event.data !== 'ping') {
-                const imageBytes = new Uint8Array(event.data);
-                const blob = new Blob([imageBytes], { type: 'image/jpeg' });
-
+                const imageBase64 = event.data;
+                const binaryData = atob(imageBase64);
+                const byteArray = new Uint8Array(binaryData.length);
+        
+                for (let i = 0; i < binaryData.length; i++) {
+                    byteArray[i] = binaryData.charCodeAt(i);
+                }
+        
+                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+        
                 const img = new Image();
                 const imageUrl = URL.createObjectURL(blob);
-
+        
                 img.onload = () => {
                     context.drawImage(img, 0, 0, canvas.width, canvas.height);
                     URL.revokeObjectURL(imageUrl);
                 };
-
+        
                 img.src = imageUrl;
             }
         };
