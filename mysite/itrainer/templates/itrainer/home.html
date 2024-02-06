@@ -7,5 +7,23 @@
       <h1 style="text-align: center;">ITrainer</h1>
       <img style="display: block; margin-left: auto; margin-right: auto;" src="{% url 'video_feed' %}">
     </div>
+
+    <h1>Camera Permission Request</h1>
+
+    <button id="requestCameraPermission">Request Camera Permission</button>
+
+    <script>
+    document.getElementById('requestCameraPermission').addEventListener('click', function() {
+        // Request camera access
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                console.log('Camera access granted:', stream);
+                // You can handle the camera stream here, e.g., display it in a video element
+            })
+            .catch(function(error) {
+                console.error('Error accessing camera:', error);
+            });
+    });
+    </script>
   </body>
 </html>
